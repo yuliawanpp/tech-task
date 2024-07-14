@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { Grid, TextField, Button, InputAdornment } from "@mui/material";
 import { EmployeeLineItem } from "../../interfaces/employees";
 import { ChangeEvent } from "react";
+import { alphabetAndSpacesRegex, phoneRegex } from "../../utils/util";
 
 interface EmployeeFormProps {
   loading: boolean;
@@ -15,19 +16,23 @@ export const EmployeeForm = ({
   employee,
   handleSubmit,
 }: EmployeeFormProps) => {
-  // Regex for phone number that has a minimum of 5 digits and a maximum of 16 digits, allowing only numeric characters.
-  const phoneRegExp = /^\d{5,16}$/;
   const validationSchema = yup.object({
-    name: yup.string().required("Name is required"),
+    name: yup
+      .string()
+      .matches(alphabetAndSpacesRegex, "Only alphabets and spaces are allowed")
+      .required("Name is required"),
     email: yup
       .string()
       .email("Enter a valid email")
       .required("Email is required"),
     phone: yup
       .string()
-      .matches(phoneRegExp, "Phone number is not valid")
+      .matches(phoneRegex, "Phone number is not valid")
       .required("Phone is required"),
-    occupation: yup.string().required("Occupation is required"),
+    occupation: yup
+      .string()
+      .matches(alphabetAndSpacesRegex, "Only alphabets and spaces are allowed")
+      .required("Occupation is required"),
   });
   const formik = useFormik({
     initialValues: {
