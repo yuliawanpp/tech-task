@@ -15,6 +15,11 @@ function App() {
   );
 }
 
+// --- If I have more time ---
+// I will Extract head of the component and make seperate file Header.tsx
+// and I will Extract Action Buttons to be reusable in other component
+// And I will make unit testing with jest and playwright
+
 function AppComponent() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] =
