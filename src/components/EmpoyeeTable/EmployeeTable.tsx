@@ -48,7 +48,7 @@ export const EmployeeTable = ({
         <TableBody>
           {loading
             ? Array.from({ length: 10 }, (_, index) => (
-                <EmployeeTableRowSkeleton />
+                <EmployeeTableRowSkeleton key={index} />
               ))
             : employees?.map((row) => {
                 return (
