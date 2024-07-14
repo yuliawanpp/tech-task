@@ -16,7 +16,10 @@ export const EmployeeForm = ({
 }: EmployeeFormProps) => {
   const validationSchema = yup.object({
     name: yup.string().required(),
-    email: yup.string().required(),
+    email: yup
+      .string()
+      .email("Enter a valid email")
+      .required("Email is required"),
     phone: yup.date().required(),
     occupation: yup.string().required(),
   });
