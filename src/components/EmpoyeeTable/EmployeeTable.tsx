@@ -53,6 +53,7 @@ export const EmployeeTable = ({
             : employees?.map((row) => {
                 return (
                   <EmployeeTableRow
+                    key={row.id}
                     employee={row}
                     handleEditEmployee={handleEditEmployee}
                   />
