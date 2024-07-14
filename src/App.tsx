@@ -5,16 +5,34 @@ import { EmployeeLineItem } from "./interfaces/employees";
 import { useEmployee } from "./hooks/useEmployee";
 import EmployeeModal from "./components/EmployeeModal/EmployeeModal";
 import { writeEmployeesToExcel } from "./utils/excel";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
 function App() {
+  return (
+    <ThemeProvider>
+      <AppComponent />
+    </ThemeProvider>
+  );
+}
+
+function AppComponent() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] =
     React.useState<EmployeeLineItem>();
   const { employees, createEmployee, updateEmployee, isLoading } =
     useEmployee();
 
+  const { darkMode, toggleTheme } = useTheme();
+
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        backgroundColor: darkMode ? "#333" : "#fff",
+        color: darkMode ? "#fff" : "#333",
+        padding: 2,
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -22,7 +40,19 @@ function App() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h5">Social Pro Tech Task</Typography>
+        <Typography variant="h5">
+          Social Pro Tech Task
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ marginLeft: 1, fontSize: "0.4rem", padding: "4px 8px" }}
+            onClick={() => {
+              toggleTheme();
+            }}
+          >
+            {darkMode ? "light" : "dark"}
+          </Button>
+        </Typography>
         <Box>
           <Button
             color="primary"
