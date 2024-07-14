@@ -1,7 +1,8 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, InputAdornment } from "@mui/material";
 import { EmployeeLineItem } from "../../interfaces/employees";
+import { ChangeEvent } from "react";
 
 interface EmployeeFormProps {
   loading: boolean;
@@ -14,14 +15,19 @@ export const EmployeeForm = ({
   employee,
   handleSubmit,
 }: EmployeeFormProps) => {
+  // Regex for phone number that has a minimum of 5 digits and a maximum of 16 digits, allowing only numeric characters.
+  const phoneRegExp = /^\d{5,16}$/;
   const validationSchema = yup.object({
-    name: yup.string().required(),
+    name: yup.string().required("Name is required"),
     email: yup
       .string()
       .email("Enter a valid email")
       .required("Email is required"),
-    phone: yup.date().required(),
-    occupation: yup.string().required(),
+    phone: yup
+      .string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone is required"),
+    occupation: yup.string().required("Occupation is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -42,6 +48,13 @@ export const EmployeeForm = ({
       });
     },
   });
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    // Strip non-digit characters for validation purposes
+    const strippedValue = value.replace(/[^\d]/g, "");
+    formik.setFieldValue("phone", strippedValue);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -81,11 +94,16 @@ export const EmployeeForm = ({
             label="phone"
             fullWidth
             disabled={loading}
-            onChange={formik.handleChange}
+            onChange={handlePhoneChange}
             onBlur={formik.handleBlur}
             value={formik.values.phone}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
             helperText={formik.touched.phone ? formik.errors.phone : ""}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">+</InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={6} sm={6}>
